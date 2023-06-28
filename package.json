@@ -1,0 +1,27 @@
+{
+  "name": "s3-simple-mannager",
+  "version": "1.0.5",
+  "description": "Simple mannager to be use it as base for basic s3 functions",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "test"
+  },
+  "author": "JECR9421",
+  "license": "ISC",
+  "files": [
+    "lib/**/*"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.3.1",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.354.0"
+  }
+}
