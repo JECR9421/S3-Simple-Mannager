@@ -1,6 +1,6 @@
 {
   "name": "s3-simple-mannager",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Simple mannager to be use it as base for basic s3 functions",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
