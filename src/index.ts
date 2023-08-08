@@ -5,18 +5,31 @@ import fs from "fs";
 import { Readable } from "stream";
 import { downloadModel } from "./models/s3.download.model";
 
-const streamToBuffer = async(stream:any) => Buffer.concat(await stream.toArray());
+const streamToString = (stream : any) =>
+    new Promise((resolve, reject) => {
+      const chunks: any[]  = [];
+      stream.on("data", (chunk: any) => chunks.push(chunk));
+      stream.on("error", reject);
+      stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+    });
 
-const createBuffer = async(body: any) => {
-    const stream = body as Readable
-    const buffer = await streamToBuffer(stream);
-    return buffer;
-}
-
-const mannageDownloadFile = (buffer: Buffer, path:string, fileName: string, bucketInfo: string) => {
+    const streamToBuffer = (stream : any) =>
+    new Promise((resolve, reject) => {
+      const chunks: any[]  = [];
+      stream.on("data", (chunk: any) => chunks.push(chunk));
+      stream.on("error", reject);
+      stream.on("end", () => resolve(Buffer.concat(chunks)));
+    });
+const mannageDownloadFile = async (data: any, path:string, fileName: string, bucketInfo: string) => {
     if (!fs.existsSync(path)) { fs.mkdirSync(path) }
-    fs.writeFileSync(path, buffer)
-    if (!fs.existsSync(`${path}/${fileName}`)) throw new Error(`Fail downloading file ${bucketInfo}`)
+    const filePath = `${path}/${fileName}`;
+    const inputStream = data;
+    await new Promise((resolve, reject) => {
+        data.pipe(fs.createWriteStream(filePath))
+          .on('error', (err: any) => reject(err))
+          .on('close', () => resolve(true))
+      })
+    if (!fs.existsSync(filePath)) throw new Error(`Fail downloading file ${bucketInfo}`)
 }
 
 const mannageDonwloadFileBase64 = (buffer:Buffer) => buffer.toString('base64'); 
@@ -34,12 +47,16 @@ export class S3Service implements S3Util {
             const input = {Bucket: bucket,Key};
             const command = new GetObjectCommand(input);
             const response = await this.client.send(command);
-            const buffer = await createBuffer(response.Body);
+           // const buffer = await createBuffer(response.Body);
             if (pathToDownload) {
-                mannageDownloadFile(buffer, pathToDownload, fileName, `${bucket}/${Key}`);
-                delete result.base64;
+                const {Body} = response;
+                // @ts-ignore
+                const bodyContents = await streamToBuffer(Body);
+                // @ts-ignore
+                fs.writeFileSync(`${pathToDownload}/${fileName}`, bodyContents);
+                console.log(bodyContents);
             }else {
-             result.base64 = mannageDonwloadFileBase64(buffer);
+             // result.base64 = mannageDonwloadFileBase64(buffer);
             }
             delete result.error;
            
