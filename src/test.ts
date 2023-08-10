@@ -2,7 +2,7 @@ import { S3Service } from ".";
 const AWS_REGION = 'us-west-2';
 const ENDPOINT = 'https://sfo2.digitaloceanspaces.com';
 const bucket = 'fedocumentsstorage';
-const fileName = 'test-input.xml';
+const fileName = 'test-image.jpg';
 const folder = 'CIA602/AGENCIA-TEST';
 const pathToDownload = 'C:/DSign/Temp';
 const test = async () => {
