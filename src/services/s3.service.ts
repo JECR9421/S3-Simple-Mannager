@@ -1,4 +1,4 @@
-import { PutObjectCommand, GetObjectCommand ,S3Client } from "@aws-sdk/client-s3";
+import { PutObjectCommand, GetObjectCommand ,HeadObjectCommand,S3Client } from "@aws-sdk/client-s3";
 import { S3Util } from "../models/s3.model";
 import { ACLTypes } from "../models/s3.acl.model";
 import fs from "fs";
@@ -56,6 +56,16 @@ export class S3ServiceOperations {
             result.error = error;
         }
         return result;
+    }
+
+    async exits(bucket: string, fileName: string, client: S3Client,  folder?: string | undefined) : Promise<boolean> {
+        try {
+            const Key = !folder ? fileName : proccessFolder(folder, fileName);
+            const input = {Bucket: bucket,Key};
+            const command = new HeadObjectCommand(input);
+        } catch (error) {
+            throw error;
+        }
     }
 
 };

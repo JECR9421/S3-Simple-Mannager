@@ -19,4 +19,8 @@ export class S3Service implements S3Util {
         return operations.upload(bucket, fileContent, fileName,acl, this.client, folder);
     }
 
+    async exists(bucket: string, fileName: string, folder?: string | undefined): Promise<boolean>{
+        const operations = new S3ServiceOperations();
+        return operations.exits(bucket, fileName, this.client, folder);
+    }
 };

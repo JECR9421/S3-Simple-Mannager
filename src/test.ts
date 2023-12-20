@@ -9,6 +9,7 @@ const test = async () => {
     const s3Mannager = new S3Service(AWS_REGION, ENDPOINT);
     const result = await s3Mannager.dowload(bucket, fileName, folder, pathToDownload);
     console.log('result', result);
+    const result2 = await s3Mannager.exists(bucket, fileName, folder);
 }
 
 test();
