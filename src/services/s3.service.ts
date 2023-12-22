@@ -1,4 +1,4 @@
-import { PutObjectCommand, GetObjectCommand ,HeadObjectCommand,S3Client } from "@aws-sdk/client-s3";
+import { PutObjectCommand, GetObjectCommand ,HeadObjectCommand,S3Client, S3ServiceException } from "@aws-sdk/client-s3";
 import { S3Util } from "../models/s3.model";
 import { ACLTypes } from "../models/s3.acl.model";
 import fs from "fs";
@@ -63,8 +63,14 @@ export class S3ServiceOperations {
             const Key = !folder ? fileName : proccessFolder(folder, fileName);
             const input = {Bucket: bucket,Key};
             const command = new HeadObjectCommand(input);
+            const response = await client.send(command);
+            if(response.ETag) return true;
+            return false;
         } catch (error) {
-            throw error;
+            if(error instanceof S3ServiceException && error?.name === 'NotFound' ) {
+                return false;
+            }
+           throw error;
         }
     }
 

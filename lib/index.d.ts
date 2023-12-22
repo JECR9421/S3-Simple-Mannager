@@ -7,4 +7,5 @@ export declare class S3Service implements S3Util {
     constructor(region: string, endpoint?: string);
     dowload(bucket: string, fileName: string, folder?: string | undefined, pathToDownload?: string): Promise<object>;
     upload(bucket: string, fileContent: Buffer, fileName: string, acl?: ACLTypes, folder?: string): Promise<boolean>;
+    exists(bucket: string, fileName: string, folder?: string | undefined): Promise<boolean>;
 }

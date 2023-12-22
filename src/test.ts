@@ -2,7 +2,7 @@ import { S3Service } from ".";
 const AWS_REGION = 'us-west-2';
 const ENDPOINT = 'https://sfo2.digitaloceanspaces.com';
 const bucket = 'fedocumentsstorage';
-const fileName = 'test-image.jpg';
+const fileName = 'test-image1.jpg';
 const folder = 'CIA602/AGENCIA-TEST';
 const pathToDownload = 'C:/DSign/Temp';
 const test = async () => {
@@ -10,6 +10,7 @@ const test = async () => {
     const result = await s3Mannager.dowload(bucket, fileName, folder, pathToDownload);
     console.log('result', result);
     const result2 = await s3Mannager.exists(bucket, fileName, folder);
+    console.log('result2', result2);
 }
 
 test();
